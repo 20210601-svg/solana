@@ -444,3 +444,25 @@ function renderFeatures(data) {
         featuresGrid.appendChild(featureCard);
     }
 }
+
+// Contact form handling
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contact-form');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            
+            // Show loading state
+            submitButton.textContent = '送信中...';
+            submitButton.disabled = true;
+            
+            // Reset button after form submission (whether success or failure)
+            setTimeout(() => {
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            }, 3000);
+        });
+    }
+});
