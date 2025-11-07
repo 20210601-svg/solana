@@ -445,23 +445,44 @@ function renderFeatures(data) {
     }
 }
 
-// Contact form handling
+// Contact form handling with reCAPTCHA
 document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contact-form');
     
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
-            const submitButton = contactForm.querySelector('button[type="submit"]');
+            e.preventDefault(); // フォームのデフォルト送信を防ぐ
+            
+            const submitButton = contactForm.querySelector('#submit-button');
             const originalText = submitButton.textContent;
+            
+            // reCAPTCHAの検証
+            const recaptchaResponse = grecaptcha.getResponse();
+            
+            if (recaptchaResponse.length === 0) {
+                alert('reCAPTCHAを完了してください。');
+                return;
+            }
             
             // Show loading state
             submitButton.textContent = '送信中...';
             submitButton.disabled = true;
             
+            // reCAPTCHAレスポンスをフォームに追加
+            const recaptchaInput = document.createElement('input');
+            recaptchaInput.type = 'hidden';
+            recaptchaInput.name = 'g-recaptcha-response';
+            recaptchaInput.value = recaptchaResponse;
+            contactForm.appendChild(recaptchaInput);
+            
+            // フォームを送信
+            contactForm.submit();
+            
             // Reset button after form submission (whether success or failure)
             setTimeout(() => {
                 submitButton.textContent = originalText;
                 submitButton.disabled = false;
+                grecaptcha.reset(); // reCAPTCHAをリセット
             }, 3000);
         });
     }
