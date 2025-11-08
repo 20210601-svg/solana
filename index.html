@@ -334,5 +334,23 @@
 
     <script src="script.js"></script>
     <script src="js/microcms.js"></script>
+    
+    <!-- フォーム送信デバッグ用スクリプト -->
+    <script>
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+        console.log('フォーム送信開始');
+        
+        // フォームデータを確認
+        const formData = new FormData(this);
+        for (let [key, value] of formData.entries()) {
+            console.log(key + ': ' + value);
+        }
+        
+        // 送信ボタンを無効化
+        const submitBtn = document.getElementById('submit-button');
+        submitBtn.disabled = true;
+        submitBtn.textContent = '送信中...';
+    });
+    </script>
 </body>
 </html>
